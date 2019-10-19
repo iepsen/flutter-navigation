@@ -29,6 +29,8 @@ class HomePageState extends State<HomeScreen> {
       body: new Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             new Container(
               height: 20,
@@ -54,12 +56,16 @@ class HomePageState extends State<HomeScreen> {
                       future: photos,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          List<FocusItem> items = [];
+                          snapshot.data.asMap().forEach((index, item) {
+                            FocusItem focusItem = FocusItem(title: item.author, image: item.imageUrl, autoFocus: index == 0,);
+                            items.add(focusItem);                            
+                          });
                           return ListView(
                             controller: controller,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: false,
-                            children: snapshot.data.map((model) => 
-                              FocusItem(title: model.author, image: model.imageUrl)).toList()
+                            children: items
                           );
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
@@ -72,7 +78,7 @@ class HomePageState extends State<HomeScreen> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
