@@ -12,24 +12,34 @@ class FocusItem extends StatefulWidget {
   
 }
 
+class StateColors {
+  static final Color normalColor = Color.fromRGBO(0, 0, 0, 0.6);
+  static final Color focusedColor = Colors.transparent;
+}
+
 class FocusItemState extends State<FocusItem> {
 
-  Color _foregroundColor = Color.fromRGBO(0, 0, 0, 0.6);
+  Color _foregroundColor = StateColors.normalColor;
 
   void onFocusChange(bool focused) {
     Color stateColor;
 
     if (focused) {
-      stateColor = Colors.transparent;
+      stateColor = StateColors.focusedColor;
     } else {
-      stateColor = Color.fromRGBO(0, 0, 0, 0.6);
+      stateColor = StateColors.normalColor;
     }
     setState(() {
       _foregroundColor = stateColor;
     });
-    if (focused) {
-      debugPrint("${widget.title} has focus");
-    }
+  }
+
+  void onHover(bool focused) {
+    onFocusChange(focused);
+  }
+
+  void onTap() {
+    debugPrint('Selected content: ${widget.title}');
   }
 
   @override
@@ -41,6 +51,8 @@ class FocusItemState extends State<FocusItem> {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onFocusChange: onFocusChange,
+          onHover: onHover,
+          onTap: onTap,
           child: Container(
             foregroundDecoration: BoxDecoration(
               color: _foregroundColor,
