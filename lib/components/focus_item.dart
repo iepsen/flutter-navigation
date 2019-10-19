@@ -3,9 +3,10 @@ import 'package:flutter/rendering.dart';
 
 class FocusItem extends StatefulWidget {
 
-  FocusItem({Key key, this.title, this.image}) : super(key: key);
+  FocusItem({Key key, this.title, this.image, this.autoFocus}) : super(key: key);
   final String title;
   final String image;
+  final bool autoFocus;
 
   @override
   FocusItemState createState() => FocusItemState();
@@ -42,6 +43,7 @@ class FocusItemState extends State<FocusItem> {
         elevation: 3,
         margin: EdgeInsets.all(10),
         child: InkWell(
+          autofocus: widget.autoFocus,
           splashColor: Colors.blue.withAlpha(30),
           onFocusChange: onFocusChange,
           onHover: onHover,

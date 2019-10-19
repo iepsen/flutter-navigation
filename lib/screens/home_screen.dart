@@ -56,12 +56,16 @@ class HomePageState extends State<HomeScreen> {
                       future: photos,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          List<FocusItem> items = [];
+                          snapshot.data.asMap().forEach((index, item) {
+                            FocusItem focusItem = FocusItem(title: item.author, image: item.imageUrl, autoFocus: index == 0,);
+                            items.add(focusItem);                            
+                          });
                           return ListView(
                             controller: controller,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: false,
-                            children: snapshot.data.map((model) => 
-                              FocusItem(title: model.author, image: model.imageUrl)).toList()
+                            children: items
                           );
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
