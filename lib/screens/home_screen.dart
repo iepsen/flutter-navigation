@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/photo.dart';
-import '../focus_item.dart';
+import '../components/focus_item.dart';
 import '../services/fetch_photos.dart';
 
 class HomeScreen extends StatefulWidget {

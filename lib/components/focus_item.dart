@@ -22,15 +22,8 @@ class FocusItemState extends State<FocusItem> {
   Color _foregroundColor = StateColors.normalColor;
 
   void onFocusChange(bool focused) {
-    Color stateColor;
-
-    if (focused) {
-      stateColor = StateColors.focusedColor;
-    } else {
-      stateColor = StateColors.normalColor;
-    }
     setState(() {
-      _foregroundColor = stateColor;
+      _foregroundColor = focused ? StateColors.focusedColor : StateColors.normalColor;
     });
   }
 
