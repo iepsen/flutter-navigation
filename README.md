@@ -1,6 +1,6 @@
-# fluttertv
+# Flutter Navigation
 
-A new Flutter project.
+Demo project to show how to use keyboard to navigate through elements.
 
 ## Getting Started
 
