@@ -1,7 +1,7 @@
 import 'dart:math';
-import 'package:fluttertv/models/photo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'models/photo.dart';
 import 'focus_item.dart';
 import 'services/fetch_photos.dart';
 

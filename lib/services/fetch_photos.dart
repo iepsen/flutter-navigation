@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:fluttertv/models/photo.dart';
+import '../models/photo.dart';
 
 Future<List<Photo>> fetchPhotos() async {
   final response = await http.get('https://picsum.photos/v2/list');
