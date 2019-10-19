@@ -1,6 +1,6 @@
 # Flutter Navigation
 
-Demo project to show how to use keyboard to navigate through elements.
+Demo project to show how to use keyboard to navigate through widgets.
 
 ## Getting Started
 
