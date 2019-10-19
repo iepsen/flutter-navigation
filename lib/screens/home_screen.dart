@@ -29,6 +29,8 @@ class HomePageState extends State<HomeScreen> {
       body: new Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             new Container(
               height: 20,
@@ -72,7 +74,7 @@ class HomePageState extends State<HomeScreen> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
