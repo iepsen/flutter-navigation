@@ -1,6 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_navigation/navigation/handle_key_press.dart';
 import '../models/photo.dart';
 import '../components/focus_item.dart';
 import '../services/fetch_photos.dart';
@@ -13,46 +12,19 @@ class HomeScreen extends StatefulWidget {
 
 class HomePageState extends State<HomeScreen> {
   ScrollController controller;
+  HandleKeyPress handleKeyPress;
   Future<List<Photo>> photos;
   
   @override
   void initState() {
-    controller = ScrollController();
     super.initState();
+    controller = ScrollController();
+    handleKeyPress = HandleKeyPress(controller);
     photos = fetchPhotos();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    bool handleKeyPress(FocusNode node, RawKeyEvent event) {
-      if (event is RawKeyDownEvent) {
-        if (event.logicalKey != LogicalKeyboardKey.arrowLeft &&
-          event.logicalKey != LogicalKeyboardKey.arrowRight) {
-            return false;
-        }
-
-        final focusedChild = node.nearestScope.focusedChild;
-
-        if (focusedChild == null) {
-          return false;
-        }
-
-        double scrollTo;
-        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          node.focusInDirection(TraversalDirection.left);
-          scrollTo = max(controller.offset - focusedChild.size.width - 20, 0);
-        }
-        if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          node.focusInDirection(TraversalDirection.right);
-          scrollTo = max(controller.offset + focusedChild.size.width + 20, 0);
-        }
-        controller.animateTo(scrollTo, duration: new Duration(milliseconds: 300), curve: Curves.ease);
-        return true;
-      }
-      return false;
-    }
-
     return Scaffold(
       body: new Container(
         child: Column(
@@ -76,7 +48,7 @@ class HomePageState extends State<HomeScreen> {
                   policy: ReadingOrderTraversalPolicy(),
                   child: FocusScope(
                     autofocus: true,
-                    onKey: handleKeyPress,
+                    onKey: handleKeyPress.onKey,
                     debugLabel: 'Scope',
                     child: FutureBuilder<List<Photo>>(
                       future: photos,
