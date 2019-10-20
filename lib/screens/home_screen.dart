@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_navigation/navigation/handle_key_press.dart';
 import '../models/video.dart';
 import '../components/focus_item.dart';
-import '../services/youtube.dart';
+import '../services/fetch_videos.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -22,7 +22,7 @@ class HomePageState extends State<HomeScreen> {
     super.initState();
     controller = ScrollController();
     handleKeyPress = HandleKeyPress(controller);
-    videos = Youtube().fetchVideos();
+    videos = VideoService().fetchVideos();
   }
 
   @override
