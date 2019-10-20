@@ -3,10 +3,12 @@ import 'package:flutter/rendering.dart';
 
 class FocusItem extends StatefulWidget {
 
-  FocusItem({Key key, this.title, this.image, this.autoFocus}) : super(key: key);
+  FocusItem({Key key, this.title, this.description, this.image, this.autoFocus, this.onFocus}) : super(key: key);
   final String title;
+  final String description;
   final String image;
   final bool autoFocus;
+  final Function onFocus;
 
   @override
   FocusItemState createState() => FocusItemState();
@@ -26,14 +28,21 @@ class FocusItemState extends State<FocusItem> {
     setState(() {
       _foregroundColor = focused ? StateColors.focusedColor : StateColors.normalColor;
     });
+    if (focused) {
+      onFocus();
+    }
   }
 
   void onHover(bool focused) {
     onFocusChange(focused);
   }
 
+  void onFocus() {
+    widget.onFocus(widget.title, widget.description);
+  }
+
   void onTap() {
-    debugPrint('Selected content: ${widget.title}');
+    //
   }
 
   @override
@@ -49,24 +58,17 @@ class FocusItemState extends State<FocusItem> {
           onHover: onHover,
           onTap: onTap,
           child: Container(
+            width: 360,
+            padding: EdgeInsets.only(bottom: 10),
+            alignment: Alignment.bottomCenter,
             foregroundDecoration: BoxDecoration(
               color: _foregroundColor,
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(widget.image)
+                fit: BoxFit.cover,
+                image: NetworkImage(widget.image),
               )
-            ),
-            width: 400,
-            height: 260,
-            padding: EdgeInsets.only(bottom: 10),
-            alignment: Alignment.bottomCenter,
-            child: Text(
-              widget.title.toUpperCase(),
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 20,
-              ),
             ),
           ),
         ),
