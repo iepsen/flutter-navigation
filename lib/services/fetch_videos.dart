@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/video.dart';
 
-class Youtube {
+class VideoService {
   final String key = "AIzaSyD-mma7efrJHHsUIp2lwZElkz1PCPLzIpc";
   final String channelId = "UC-OjykH8z-DrOMJmait_-vw";
   final String part = "snippet";
