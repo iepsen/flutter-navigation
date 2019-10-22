@@ -3,14 +3,11 @@ import 'package:http/http.dart' as http;
 import '../models/video.dart';
 
 class VideoService {
-  final String key = "AIzaSyD-mma7efrJHHsUIp2lwZElkz1PCPLzIpc";
-  final String channelId = "UC-OjykH8z-DrOMJmait_-vw";
-  final String part = "snippet";
-  final String maxResults = "50";
-  final String apiUrl = "https://www.googleapis.com/youtube/v3/search";
+  final String playlistId = "2114913880001";
+  final String apiUrl = "https://video.foxnews.com/v/feed/playlist";
 
   String buildRequestUrl() {
-   return "${this.apiUrl}?part=${this.part}&channelId=${this.channelId}&key=${this.key}&maxResults=${this.maxResults}";
+   return "${this.apiUrl}/${this.playlistId}.json?template=fox";
   }
 
   Future<List<Video>> fetchVideos() async {
@@ -18,7 +15,7 @@ class VideoService {
 
   if (response.statusCode == 200) {
     dynamic body = json.decode(response.body);
-    Iterable list = body['items'];
+    Iterable list = body['channel']['item'];
     return list.map((model) => Video.fromJson(model)).toList();
   } else {
     throw Exception('Failed to load photos');
