@@ -90,7 +90,7 @@ class VideoScreenState extends State<VideoScreen> {
                     iconSize: 50,
                     focusColor: Colors.red,
                     icon: Icon(Icons.arrow_back),
-                    autofocus: true,
+                    autofocus: false,
                     onPressed: this.back
                   ),
                 ),
