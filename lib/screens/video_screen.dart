@@ -11,6 +11,7 @@ class VideoScreen extends StatefulWidget {
 class VideoScreenState extends State<VideoScreen> {
 
   Player player;
+  IconData _playPauseIcon = Icons.play_arrow;
 
   @override
   void initState() {
@@ -21,6 +22,8 @@ class VideoScreenState extends State<VideoScreen> {
   void initPlayer() {
     this.player = Player();
     this.player.onCanPlay(this.onCanPlay);
+    this.player.onPlay(this.onPlay);
+    this.player.onPause(this.onPause);
     this.player.onEnded(this.onEnded);
     this.player.onDurationChange(this.onDurationChange);
     this.player.onTimeUpdate(this.onTimeUpdate);
@@ -28,10 +31,22 @@ class VideoScreenState extends State<VideoScreen> {
   }
 
   void onCanPlay(Event event) {
-    debugPrint('yes, you can play!');
     this.player.play();
   }
 
+  void onPlay(Event event) {
+    debugPrint('onPlay');
+    setState(() {
+      _playPauseIcon = Icons.pause;
+    });
+  }
+
+  void onPause(Event event) {
+    debugPrint('onPause');
+    setState(() {
+      _playPauseIcon = Icons.play_arrow;
+    });
+  }
   void onEnded(Event event) {
     debugPrint(event.toString());
   }
@@ -44,8 +59,68 @@ class VideoScreenState extends State<VideoScreen> {
     debugPrint(this.player.getCurrentTime().toString());
   }
 
+  void tooglePlayPause() {
+    this.player.isPlaying() ? this.player.pause() : this.player.play();
+  }
+
+  void stop() {
+    //
+  }
+
+  void back() {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Container(width: 0, height: 0,);
+    return new Material(
+      child: Container(
+        width: 600,
+        height: 200,
+        margin: EdgeInsets.all(20),
+        child: DefaultFocusTraversal(
+          policy: ReadingOrderTraversalPolicy(),
+          child: FocusScope(
+            debugLabel: 'IconsBar',
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    iconSize: 50,
+                    focusColor: Colors.red,
+                    icon: Icon(Icons.arrow_back),
+                    autofocus: true,
+                    onPressed: this.back
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        iconSize: 50,
+                        focusColor: Colors.red,
+                        icon: Icon(_playPauseIcon),
+                        autofocus: true,
+                        onPressed: this.tooglePlayPause
+                      ),
+                      IconButton(
+                        iconSize: 50,
+                        focusColor: Colors.red,
+                        icon: Icon(Icons.stop),
+                        autofocus: false,
+                        onPressed: this.stop
+                      )
+                    ],
+                  )
+                )
+              ]
+            ),
+          ),
+        ),
+      )
+    );
   }
 }
