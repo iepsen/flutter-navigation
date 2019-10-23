@@ -1,7 +1,11 @@
 import 'dart:html';
-
 import 'package:flutter/material.dart';
-import '../plugins/player.dart';
+import 'dart:ui' as ui;
+
+class StateColors {
+  static final Color normalColor = Colors.white;
+  static final Color focusedColor = Colors.red;
+}
 
 class VideoScreen extends StatefulWidget {
   @override
@@ -10,8 +14,11 @@ class VideoScreen extends StatefulWidget {
 
 class VideoScreenState extends State<VideoScreen> {
 
-  Player player;
+  VideoElement player;
   IconData _playPauseIcon = Icons.play_arrow;
+  Color _playPauseColor = Colors.red;
+  Color _backColor = Colors.white;
+  Color _stopColor = Colors.white;
 
   @override
   void initState() {
@@ -20,14 +27,14 @@ class VideoScreenState extends State<VideoScreen> {
   }
 
   void initPlayer() {
-    this.player = Player();
-    this.player.onCanPlay(this.onCanPlay);
-    this.player.onPlay(this.onPlay);
-    this.player.onPause(this.onPause);
-    this.player.onEnded(this.onEnded);
-    this.player.onDurationChange(this.onDurationChange);
-    this.player.onTimeUpdate(this.onTimeUpdate);
-    this.player.initWithSource(src: 'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4');
+    this.player = VideoElement();
+    this.player.onCanPlay.listen(this.onCanPlay);
+    this.player.onPlay.listen(this.onPlay);
+    this.player.onPause.listen(this.onPause);
+    this.player.onEnded.listen(this.onEnded);
+    this.player.onDurationChange.listen(this.onDurationChange);
+    this.player.onTimeUpdate.listen(this.onTimeUpdate);
+    this.player.src = 'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4';
   }
 
   void onCanPlay(Event event) {
@@ -56,11 +63,11 @@ class VideoScreenState extends State<VideoScreen> {
   }
 
   void onTimeUpdate(Event event) {
-    debugPrint(this.player.getCurrentTime().toString());
+    debugPrint(this.player.currentTime.toString());
   }
 
   void tooglePlayPause() {
-    this.player.isPlaying() ? this.player.pause() : this.player.play();
+    this.player.paused ? this.player.play() : this.player.pause();
   }
 
   void stop() {
@@ -71,55 +78,96 @@ class VideoScreenState extends State<VideoScreen> {
     //
   }
 
+  onFocusChangeBackIcon(bool focused) {
+      setState(() {
+      _backColor = focused ? StateColors.focusedColor : StateColors.normalColor;
+    });
+  }
+
+  onFocusChangePlayPauseIcon(bool focused) {
+      setState(() {
+      _playPauseColor = focused ? StateColors.focusedColor : StateColors.normalColor;
+    });
+  }
+
+  onFocusChangeStopIcon(bool focused) {
+      setState(() {
+      _stopColor = focused ? StateColors.focusedColor : StateColors.normalColor;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ui.platformViewRegistry.registerViewFactory(
+      'video-player',
+      (int viewId) => this.player
+    );
     return new Material(
-      child: Container(
-        width: 600,
-        height: 200,
-        margin: EdgeInsets.all(20),
-        child: DefaultFocusTraversal(
-          policy: ReadingOrderTraversalPolicy(),
-          child: FocusScope(
-            debugLabel: 'IconsBar',
-            child: Stack(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    iconSize: 50,
-                    focusColor: Colors.red,
-                    icon: Icon(Icons.arrow_back),
-                    autofocus: false,
-                    onPressed: this.back
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        iconSize: 50,
-                        focusColor: Colors.red,
-                        icon: Icon(_playPauseIcon),
-                        autofocus: true,
-                        onPressed: this.tooglePlayPause
-                      ),
-                      IconButton(
-                        iconSize: 50,
-                        focusColor: Colors.red,
-                        icon: Icon(Icons.stop),
+      type: MaterialType.canvas,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: HtmlElementView(viewType: 'video-player',),
+          ),
+          DefaultFocusTraversal(
+            policy: ReadingOrderTraversalPolicy(),
+            child: Container(
+              margin: EdgeInsets.all(20),
+              child: FocusScope(
+                debugLabel: 'IconsBar',
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: InkWell(
                         autofocus: false,
-                        onPressed: this.stop
+                        onFocusChange: onFocusChangeBackIcon,
+                        child: IconButton(
+                          iconSize: 50,
+                          icon: Icon(Icons.arrow_back, color: _backColor),
+                          autofocus: false,
+                          onPressed: this.back
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            autofocus: false,
+                            onFocusChange: onFocusChangePlayPauseIcon,
+                            child: 
+                              IconButton(
+                                iconSize: 50,
+                                icon: Icon(_playPauseIcon, color: _playPauseColor),
+                                autofocus: true,
+                                onPressed: this.tooglePlayPause
+                              ),
+                          ),
+                          InkWell(
+                            autofocus: false,
+                            onFocusChange: onFocusChangeStopIcon,
+                            child: IconButton(
+                              iconSize: 50,
+                              icon: Icon(Icons.stop, color: _stopColor,),
+                              autofocus: false,
+                              color: Colors.red,
+                              onPressed: this.stop
+                            )
+                          )
+                        ],
                       )
-                    ],
-                  )
-                )
-              ]
+                    )
+                  ]
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       )
     );
   }
