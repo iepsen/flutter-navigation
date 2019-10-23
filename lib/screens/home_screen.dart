@@ -7,10 +7,10 @@ import '../services/fetch_videos.dart';
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
   @override
-  HomePageState createState() => HomePageState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class HomePageState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   ScrollController controller;
   HandleKeyPress handleKeyPress;
   Future<List<Video>> videos;
@@ -48,7 +48,7 @@ class HomePageState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             new Container(
-              margin: EdgeInsets.only(left: 60, right: 60, top: 10, bottom: 10),
+              margin: EdgeInsets.only(left: 30, right: 60, top: 10, bottom: 10),
               child: Text(
                 _title,
                 style: TextStyle(
@@ -57,7 +57,7 @@ class HomePageState extends State<HomeScreen> {
               ),
             ),
             new Container(
-              margin: EdgeInsets.only(left: 60, right: 60, top: 10, bottom: 10),
+              margin: EdgeInsets.only(left: 30, right: 60, top: 10, bottom: 10),
               width: 600,
               height: 300,
               child: Text(
@@ -69,9 +69,9 @@ class HomePageState extends State<HomeScreen> {
             ),
             new Container(
               height: 30,
-              margin: EdgeInsets.only(left: 60, top: 10, bottom: 10),
+              margin: EdgeInsets.only(left: 30, top: 10, bottom: 10),
               child: new Text(
-                'YouTube 4K Relaxation Channel'.toUpperCase(),
+                'FOX News Clips'.toUpperCase(),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 20,
