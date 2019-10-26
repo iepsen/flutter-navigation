@@ -38,6 +38,16 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onTap(String videoUrl) {
+    debugPrint(videoUrl);
+    /*
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VideoScreen(videoUrl: videoUrl,)),
+    );
+    */
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +106,8 @@ class HomeScreenState extends State<HomeScreen> {
                             FocusItem focusItem = FocusItem(
                               title: item.title,
                               description: item.description,
-                              image: item.imageUrl,
+                              imageUrl: item.imageUrl,
+                              videoUrl: item.videoUrl,
                               autoFocus: index == 0,
                               onFocus: this.onFocus
                             );

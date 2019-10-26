@@ -8,8 +8,15 @@ class StateColors {
 }
 
 class VideoScreen extends StatefulWidget {
+  
+  final String videoUrl;
+  
   @override
-  VideoScreenState createState() => VideoScreenState();
+  VideoScreenState createState() {
+   return  VideoScreenState();
+  }
+
+  VideoScreen({this.videoUrl});
 }
 
 class VideoScreenState extends State<VideoScreen> {
@@ -24,6 +31,7 @@ class VideoScreenState extends State<VideoScreen> {
   void initState() {
     super.initState();
     this.initPlayer();
+    debugPrint('initState');
   }
 
   void initPlayer() {
@@ -34,7 +42,12 @@ class VideoScreenState extends State<VideoScreen> {
     this.player.onEnded.listen(this.onEnded);
     this.player.onDurationChange.listen(this.onDurationChange);
     this.player.onTimeUpdate.listen(this.onTimeUpdate);
-    this.player.src = 'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4';
+    this.player.src = widget.videoUrl;
+
+    ui.platformViewRegistry.registerViewFactory(
+      'video-player',
+      (int viewId) => this.player
+    );
   }
 
   void onCanPlay(Event event) {
@@ -55,15 +68,15 @@ class VideoScreenState extends State<VideoScreen> {
     });
   }
   void onEnded(Event event) {
-    debugPrint(event.toString());
+    // debugPrint(event.toString());
   }
 
   void onDurationChange(Event event) {
-    debugPrint(event.toString());
+    // debugPrint(event.toString());
   }
 
   void onTimeUpdate(Event event) {
-    debugPrint(this.player.currentTime.toString());
+    // debugPrint(this.player.currentTime.toString());
   }
 
   void tooglePlayPause() {
@@ -75,7 +88,10 @@ class VideoScreenState extends State<VideoScreen> {
   }
 
   void back() {
-    //
+    this.player.pause();
+    this.player.remove();
+    this.player = null;
+    Navigator.pop(context);
   }
 
   onFocusChangeBackIcon(bool focused) {
@@ -98,10 +114,6 @@ class VideoScreenState extends State<VideoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ui.platformViewRegistry.registerViewFactory(
-      'video-player',
-      (int viewId) => this.player
-    );
     return new Material(
       type: MaterialType.canvas,
       child: Stack(
@@ -109,7 +121,7 @@ class VideoScreenState extends State<VideoScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: HtmlElementView(viewType: 'video-player',),
+            child: HtmlElementView(viewType: 'video-player'),
           ),
           DefaultFocusTraversal(
             policy: ReadingOrderTraversalPolicy(),
@@ -124,6 +136,7 @@ class VideoScreenState extends State<VideoScreen> {
                       child: InkWell(
                         autofocus: false,
                         onFocusChange: onFocusChangeBackIcon,
+                        onTap: this.back,
                         child: IconButton(
                           iconSize: 50,
                           icon: Icon(Icons.arrow_back, color: _backColor),

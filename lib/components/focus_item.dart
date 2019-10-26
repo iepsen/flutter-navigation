@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_navigation/screens/video_screen.dart';
 
 class FocusItem extends StatefulWidget {
 
-  FocusItem({Key key, this.title, this.description, this.image, this.autoFocus, this.onFocus}) : super(key: key);
+  FocusItem({Key key, this.title, this.description, this.imageUrl, this.videoUrl, this.autoFocus, this.onFocus, this.onTap}) : super(key: key);
   final String title;
   final String description;
-  final String image;
+  final String imageUrl;
+  final String videoUrl;
   final bool autoFocus;
   final Function onFocus;
+  final Function onTap;
 
   @override
   FocusItemState createState() => FocusItemState();
-  
 }
 
 class StateColors {
@@ -42,7 +44,12 @@ class FocusItemState extends State<FocusItem> {
   }
 
   void onTap() {
-    //
+    // widget.onTap(widget.videoUrl);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VideoScreen(videoUrl: widget.videoUrl,)),
+    );
+
   }
 
   @override
@@ -67,7 +74,7 @@ class FocusItemState extends State<FocusItem> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(widget.image),
+                image: NetworkImage(widget.imageUrl),
               )
             ),
           ),
